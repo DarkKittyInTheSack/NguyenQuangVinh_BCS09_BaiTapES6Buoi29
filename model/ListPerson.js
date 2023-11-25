@@ -7,6 +7,10 @@ export class ListPerson{
         return this.arrPerson
     }
 
+    setList = (list = []) =>{
+        this.arrPerson = list
+    }
+
     addPersonToList = (Person) =>{
         this.arrPerson.push(Person)
     }
@@ -16,11 +20,7 @@ export class ListPerson{
     }
 
     getPersonIndexByID = (id) =>{
-        let personIndex = 0
-        this.arrPerson.forEach((item,index)=> {
-            item.id == id ? personIndex =  index : personIndex = -1
-        })
-        return personIndex
+        return this.arrPerson.findIndex((item,index) => item.id == id)
     }
 
     removePerson = (id) =>{

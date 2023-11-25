@@ -6,83 +6,85 @@ import { Student } from "../model/Student.js"
 
 let arrPerson = new ListPerson()
 
+const openForm = (value, content = '') =>{
+  switch(value){
+      case 'student':
+          content = `<div class="my-3">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markMath">
+            Điểm toán
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markMath" type="number" placeholder="Vui lòng nhập vào Điểm toán">
+          <p class="text-red-500 text-xs italic"></p>
+        </div>
+
+        <div class="my-3">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markPhys">
+            Điểm lý
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markPhys" type="number" placeholder="Vui lòng nhập vào Điểm lý">
+          <p class="text-red-500 text-xs italic"></p>
+        </div>
+
+        <div class="my-3">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markChems">
+            Điểm hóa
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markChems" type="number" placeholder="Vui lòng nhập vào Điểm hóa">
+          <p class="text-red-500 text-xs italic"></p>
+        </div>`
+        break;
+      
+      case 'employee':
+          content = `<div class="my-3">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="workingHour">
+            Số giờ làm
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="workingHour" type="number" placeholder="Vui lòng nhập vào số giờ làm">
+          <p class="text-red-500 text-xs italic"></p>
+        </div>
+
+        <div class="my-3">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="salaryPerHour">
+            Lương theo giờ
+          </label>
+          <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="salaryPerHour" type="number" placeholder="Vui lòng nhập vào lương theo giờ">
+          <p class="text-red-500 text-xs italic"></p>
+        </div>`
+        break;
+
+      case 'customer':
+        content = `<div class="my-3">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="companyName">
+          Tên công ty
+        </label>
+        <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="companyName" type="text" placeholder="Vui lòng nhập tên công ty">
+        <p class="text-red-500 text-xs italic"></p>
+      </div>
+
+      <div class="my-3">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="billValue">
+          Giá trị hóa đơn
+        </label>
+        <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="billValue" type="number" placeholder="Vui lòng nhập giá trị hóa đơn">
+        <p class="text-red-500 text-xs italic"></p>
+      </div>
+
+      <div class="my-3">
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="rate">
+          Đánh giá
+        </label>
+        <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rate" type="number" placeholder="Vui lòng nhập vào điểm đánh giá">
+        <p class="text-red-500 text-xs italic"></p>
+      </div>`
+      break;
+    }
+    return content
+}
+
 document.getElementById('type').addEventListener('change', function(){
     document.querySelector('.specific').style.display = 'none'
     let value = document.getElementById('type').value
-    let content =''
-
-    switch(value){
-        case 'student':
-            content = `<div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markMath">
-              Điểm toán
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markMath" type="number" placeholder="Vui lòng nhập vào Điểm toán">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>
-
-          <div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markPhys">
-              Điểm lý
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markPhys" type="number" placeholder="Vui lòng nhập vào Điểm lý">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>
-
-          <div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="markChems">
-              Điểm hóa
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markChems" type="number" placeholder="Vui lòng nhập vào Điểm hóa">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>`
-          break;
-        
-        case 'employee':
-            content = `<div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="workingHour">
-              Số giờ làm
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="workingHour" type="number" placeholder="Vui lòng nhập vào số giờ làm">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>
-
-          <div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="salaryPerHour">
-              Lương theo giờ
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="salaryPerHour" type="number" placeholder="Vui lòng nhập vào lương theo giờ">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>`
-          break;
-
-        case 'customer':
-            content = `<div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="companyName">
-              Tên công ty
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="companyName" type="number" placeholder="Vui lòng nhập tên công ty">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>
-
-          <div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="billValue">
-              Giá trị hóa đơn
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="billValue" type="number" placeholder="Vui lòng nhập giá trị hóa đơn">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>
-
-          <div class="my-3">
-            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="rate">
-              Đánh giá
-            </label>
-            <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rate" type="number" placeholder="Vui lòng nhập vào điểm đánh giá">
-            <p class="text-red-500 text-xs italic"></p>
-          </div>`
-          break;
-    }
-
+    let content = openForm(value,'')
     document.querySelector('.specific').innerHTML = content
     document.querySelector('.specific').style.display = 'block'
 })
@@ -91,7 +93,13 @@ const enableUpdate = (enterUpdate) =>{
     let update = document.querySelector('.update')
     enterUpdate ? update.style.display = "block" : update.style.display = "none"
 }
+
+const enableAdd = (enterUpdate) =>{
+  let update = document.querySelector('.add')
+  enterUpdate ? update.style.display = "block" : update.style.display = "none"
+}
 enableUpdate(false)
+enableAdd(true)
 
 const addToLocalStorage = (key) =>{
     localStorage.setItem(key, JSON.stringify(arrPerson.getList()))
@@ -101,68 +109,91 @@ const getFromLocalStorage = () =>{
     return JSON.parse(localStorage.getItem('arrPerson'))
 }
 
-const setTypeID = (id,type) =>{
-    return document.querySelector('.'+id).ariaValueMax.toUpperCase()
+const setType = (id) =>{
+  let type = ''
+  id.includes('STUDENT') ? type = 'STUDENT' : 
+  id.includes('EMPLOYEE') ? type = 'EMPLOYEE':
+  type = 'CUSTOMER'
+  return type
 }
 
 const showPersonData = () =>{
-  let arrPerson = getFromLocalStorage('arrPerson')
+  let arrPerson = getFromLocalStorage()
   let content = ''
-
-  arrPerson.forEach((item) =>{
+  arrPerson || arrPerson.length != 0 ? arrPerson.forEach((item) =>{
+    const {id,name,address,email} = item
     content += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              ${item.id}
+              ${id}
           </th>
           <td class="px-6 py-4">
-              ${item.name}
+              ${name}
           </td>
           <td class="px-6 py-4">
-              ${item.address}
+              ${address}
           </td>
           <td class="px-6 py-4">
-              ${item.email}
+              ${email}
           </td>
           <td class="px-6 py-4">
-            Type
+            ${setType(id)}
           </td>
           <td class="px-6 py-4">
             <div class="flex">
-                <button class="text-2xl me-4 text-green-500"><i class="ri-edit-fill"></i></button>
-                <button class="text-2xl text-red-500"><i class="ri-delete-bin-fill"></i></button>
+                <button class="edit text-2xl me-4 text-green-500" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"><i class="ri-edit-fill"></i></button>
+                <button class="text-2xl text-red-500" onclick="removePerson('${id}')"><i class="ri-delete-bin-fill"></i></button>
             </div>
           </td>
       </tr>`
 
       document.querySelector('tbody').innerHTML = content
-  })
+  }) : ''
 }
 
 showPersonData()
+document.querySelector('.edit').addEventListener('click', function(){
+  document.querySelector('.title').innerHTML = 'Cập nhật người dùng'
+  enableAdd(false)
+  enableUpdate(true)
+
+})
 
 const addPersonData = () =>{
     let arrForm = document.querySelectorAll('form input')
     let personType = document.getElementById('type').value
-    let person = null
+    let person = null, type = ''
     switch(personType){
         case 'student':
             person = new Student()
+            type = 'STUDENT'
             break;
         
         case 'employee':
             person = new Employee()
+            type = 'EMPLOYEE'
             break;
         
         case 'customer':
             person = new Customer()
+            type = 'CUSTOMER'
             break;
     }
     arrForm.forEach((item,index) =>{
-      person[item.id] = item.value
+      item.id == 'id' ? person[item.id] = item.value+type : person[item.id] = item.value
     })
     arrPerson.addPersonToList(person)
     addToLocalStorage('arrPerson')
+    showPersonData()
 }
 
+const removePerson = (id) =>{
+  arrPerson.setList(getFromLocalStorage())
+  arrPerson.removePerson(id)
+  addToLocalStorage('arrPerson')
+  showPersonData()
+}
+
+window.removePerson = removePerson
 window.addPersonData = addPersonData
+
 
