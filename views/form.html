@@ -28,6 +28,13 @@
       Thêm người dùng
     </button>
 
+    <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="filter">
+      <option value="">Lọc theo ... </option>
+      <option value="student">Học Sinh</option>
+      <option value="employee">Nhân viên</option>
+      <option value="customer">Khách hàng</option>
+    </select>
+
     <div id="authentication-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
@@ -52,28 +59,28 @@
                             Mã người dùng
                           </label>
                           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="id" type="text" placeholder="Vui lòng nhập vào Mã người dùng">
-                          <p class="text-red-500 text-xs italic"></p>
+                          <p class="text-red-500 text-xs italic" id="idError"></p>
                         </div>
                         <div>
                           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name">
                             Họ và tên
                           </label>
                           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" placeholder="Vui lòng nhập Họ và tên">
-                          <p class="text-red-500 text-xs italic"></p>
+                          <p class="text-red-500 text-xs italic" id="nameError"></p>
                         </div>
                         <div>
                           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="address">
                             Địa chỉ
                           </label>
                           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="address" type="text" placeholder="Vui lòng nhập Địa chỉ">
-                          <p class="text-red-500 text-xs italic"></p>
+                          <p class="text-red-500 text-xs italic" id="addressError"></p>
                         </div>
                         <div>
                           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="email">
                             Email
                           </label>
                           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Vui lòng nhập Email">
-                          <p class="text-red-500 text-xs italic"></p>
+                          <p class="text-red-500 text-xs italic" id="emailError"></p>
                         </div>
                         <div>
                           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="type">Bạn là</label>
@@ -83,6 +90,7 @@
                             <option value="employee">Nhân viên</option>
                             <option value="customer">Khách hàng</option>
                           </select>
+                          <p class="text-red-500 text-xs italic" id="typeError"></p>
                         </div>
                         <!--Specific form-->
                         <div class="specific my-5">
@@ -90,7 +98,7 @@
                         </div>
                         
                         <button type="submit" onclick="addPersonData()" class="add w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Thêm người dùng</button>
-                        <button type="submit" class="update w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cập nhật người dùng</button>
+                        <button type="submit" onclick="updatePerson()" class="update w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cập nhật người dùng</button>
                     </form>
                 </div>
             </div>

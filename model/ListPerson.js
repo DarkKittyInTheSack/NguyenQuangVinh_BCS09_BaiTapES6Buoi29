@@ -12,6 +12,7 @@ export class ListPerson{
     }
 
     addPersonToList = (Person) =>{
+       this.arrPerson == null ? this.arrPerson = [] : this.arrPerson = this.arrPerson
         this.arrPerson.push(Person)
     }
 
@@ -27,8 +28,8 @@ export class ListPerson{
         this.arrPerson.splice(this.getPersonIndexByID(id),1)
     }
 
-    fillterPersonList = (id) =>{
-        return this.arrPerson.filter((item,index) => item.id == id)
+    fillterPersonList = (key) =>{
+        return this.arrPerson.filter((item,index) => (item.id).includes(key))
     }
 
     sortListByAlphabetical = () =>{

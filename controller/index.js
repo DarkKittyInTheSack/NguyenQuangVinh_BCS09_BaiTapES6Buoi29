@@ -14,7 +14,7 @@ const openForm = (value, content = '') =>{
             Điểm toán
           </label>
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markMath" type="number" placeholder="Vui lòng nhập vào Điểm toán">
-          <p class="text-red-500 text-xs italic"></p>
+          <p class="text-red-500 text-xs italic" id="markMathError"></p>
         </div>
 
         <div class="my-3">
@@ -22,7 +22,7 @@ const openForm = (value, content = '') =>{
             Điểm lý
           </label>
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markPhys" type="number" placeholder="Vui lòng nhập vào Điểm lý">
-          <p class="text-red-500 text-xs italic"></p>
+          <p class="text-red-500 text-xs italic" id="markPhysError"></p>
         </div>
 
         <div class="my-3">
@@ -30,7 +30,7 @@ const openForm = (value, content = '') =>{
             Điểm hóa
           </label>
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="markChems" type="number" placeholder="Vui lòng nhập vào Điểm hóa">
-          <p class="text-red-500 text-xs italic"></p>
+          <p class="text-red-500 text-xs italic" id="markChemsError"></p>
         </div>`
         break;
       
@@ -40,7 +40,7 @@ const openForm = (value, content = '') =>{
             Số giờ làm
           </label>
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="workingHour" type="number" placeholder="Vui lòng nhập vào số giờ làm">
-          <p class="text-red-500 text-xs italic"></p>
+          <p class="text-red-500 text-xs italic" id="workingHourError"></p>
         </div>
 
         <div class="my-3">
@@ -48,7 +48,7 @@ const openForm = (value, content = '') =>{
             Lương theo giờ
           </label>
           <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="salaryPerHour" type="number" placeholder="Vui lòng nhập vào lương theo giờ">
-          <p class="text-red-500 text-xs italic"></p>
+          <p class="text-red-500 text-xs italic" id="salaryPerHourError"></p>
         </div>`
         break;
 
@@ -58,7 +58,7 @@ const openForm = (value, content = '') =>{
           Tên công ty
         </label>
         <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="companyName" type="text" placeholder="Vui lòng nhập tên công ty">
-        <p class="text-red-500 text-xs italic"></p>
+        <p class="text-red-500 text-xs italic" id="companyNameError"></p>
       </div>
 
       <div class="my-3">
@@ -66,7 +66,7 @@ const openForm = (value, content = '') =>{
           Giá trị hóa đơn
         </label>
         <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="billValue" type="number" placeholder="Vui lòng nhập giá trị hóa đơn">
-        <p class="text-red-500 text-xs italic"></p>
+        <p class="text-red-500 text-xs italic" id="billValueError"></p>
       </div>
 
       <div class="my-3">
@@ -74,7 +74,7 @@ const openForm = (value, content = '') =>{
           Đánh giá
         </label>
         <input class="shadow appearance-none border rounded w-full p-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="rate" type="number" placeholder="Vui lòng nhập vào điểm đánh giá">
-        <p class="text-red-500 text-xs italic"></p>
+        <p class="text-red-500 text-xs italic" id="rateError"></p>
       </div>`
       break;
     }
@@ -89,14 +89,22 @@ document.getElementById('type').addEventListener('change', function(){
     document.querySelector('.specific').style.display = 'block'
 })
 
+document.getElementById('filter').addEventListener('change', ()=>{
+  let value = document.getElementById('filter').value
+  showPersonData(arrPerson.fillterPersonList(value.toUpperCase()))
+})
+
 const enableUpdate = (enterUpdate) =>{
     let update = document.querySelector('.update')
     enterUpdate ? update.style.display = "block" : update.style.display = "none"
+    return enterUpdate
 }
 
 const enableAdd = (enterUpdate) =>{
   let update = document.querySelector('.add')
   enterUpdate ? update.style.display = "block" : update.style.display = "none"
+  document.querySelector('form').reset()
+  document.querySelector('#id').readOnly = false
 }
 
 const openAddData = ()=>{
@@ -105,8 +113,8 @@ const openAddData = ()=>{
   enableAdd(true)
 }
 
-const addToLocalStorage = (key) =>{
-    localStorage.setItem(key, JSON.stringify(arrPerson.getList()))
+const addToLocalStorage = () =>{
+    localStorage.setItem('arrPerson', JSON.stringify(arrPerson.getList()))
 }
 
 const getFromLocalStorage = () =>{
@@ -122,13 +130,12 @@ const setType = (id) =>{
   return type
 }
 
-const showPersonData = () =>{
-  let arrPerson = getFromLocalStorage()
+const showPersonData = (arr = arrPerson.getList()) =>{
   let content = ''
-  if(!arrPerson || arrPerson.length ==0){
+  if(!arr || arr.length ==0){
     document.querySelector('tbody').innerHTML = ''
   }else{
-    arrPerson.forEach((item) =>{
+    arr.forEach((item) =>{
       const {id,name,address,email} = item
       content += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -161,27 +168,13 @@ const showPersonData = () =>{
 }
 
 showPersonData()
-const openEditForm = (data,type) =>{
-  document.querySelector('.title').innerHTML = 'Cập nhật người dùng'
-  enableAdd(false)
-  enableUpdate(true)
 
-  let content = openForm(type,'')
-  document.querySelector('.specific').innerHTML = content
-  let arrForm = document.querySelectorAll('form input','.specific input')
-
-  document.getElementById('type').value = type
-  let person = arrPerson.getPersonFromList(data)
-  arrForm.forEach((item,index) =>{
-    item.value = person[`${item.id}`]
-  })
-}
-
-const addPersonData = () =>{
-    let arrForm = document.querySelectorAll('form input')
-    arrPerson.setList(getFromLocalStorage())
+const getPersonInForm = () =>{
+  let arrForm = document.querySelectorAll('form input')
     let personType = document.getElementById('type').value
-    let person = null, type = ''
+    let getIdForUpdate = document.getElementById('id').value
+    
+    let person = null, type = '',isValid = true
     switch(personType){
         case 'student':
             person = new Student()
@@ -199,10 +192,51 @@ const addPersonData = () =>{
             break;
     }
     arrForm.forEach((item,index) =>{
-      item.id == 'id' ? person[item.id] = item.value+type : person[item.id] = item.value
+      if(item.id == 'id' && !getIdForUpdate.includes(type)){
+        person[item.id] = item.value+type
+      }else{
+        person[item.id] = item.value
+      }
+      // isValid &= checkNull(item.id,item.id+'Error')
     })
-    arrPerson.addPersonToList(person)
-    addToLocalStorage('arrPerson')
+
+    // if(isValid){
+      
+    // }
+
+    return person
+    
+}
+
+const openEditForm = (data,type) =>{
+  document.querySelector('.title').innerHTML = 'Cập nhật người dùng'
+  document.querySelector('#id').readOnly = true
+  enableAdd(false)
+  enableUpdate(true)
+  let content = openForm(type,'')
+  document.querySelector('.specific').innerHTML = content
+  let arrForm = document.querySelectorAll('form input','.specific input')
+
+  document.getElementById('type').value = type
+  document.getElementById('id').readOnly = true
+  let person = arrPerson.getPersonFromList(data)
+  
+  arrForm.forEach((item,index) =>{
+    item.value = person[`${item.id}`]
+  })
+}
+
+const updatePerson = () =>{
+    let personID = document.getElementById('id').value
+    arrPerson.getList()[arrPerson.getPersonIndexByID(personID)] = getPersonInForm()
+    addToLocalStorage()
+    showPersonData()
+}
+
+const addPersonData = () =>{
+    arrPerson.setList(getFromLocalStorage())
+    arrPerson.addPersonToList(getPersonInForm())
+    addToLocalStorage()
     showPersonData()
 }
 
@@ -217,5 +251,6 @@ window.removePerson = removePerson
 window.addPersonData = addPersonData
 window.openAddData = openAddData
 window.openEditForm = openEditForm
+window.updatePerson = updatePerson
 
 
