@@ -98,8 +98,12 @@ const enableAdd = (enterUpdate) =>{
   let update = document.querySelector('.add')
   enterUpdate ? update.style.display = "block" : update.style.display = "none"
 }
-enableUpdate(false)
-enableAdd(true)
+
+const openAddData = ()=>{
+  document.querySelector('.title').innerHTML = 'Thêm mới người dùng'
+  enableUpdate(false)
+  enableAdd(true)
+}
 
 const addToLocalStorage = (key) =>{
     localStorage.setItem(key, JSON.stringify(arrPerson.getList()))
@@ -108,6 +112,7 @@ const addToLocalStorage = (key) =>{
 const getFromLocalStorage = () =>{
     return JSON.parse(localStorage.getItem('arrPerson'))
 }
+arrPerson.setList(getFromLocalStorage())
 
 const setType = (id) =>{
   let type = ''
@@ -120,46 +125,61 @@ const setType = (id) =>{
 const showPersonData = () =>{
   let arrPerson = getFromLocalStorage()
   let content = ''
-  arrPerson || arrPerson.length != 0 ? arrPerson.forEach((item) =>{
-    const {id,name,address,email} = item
-    content += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              ${id}
-          </th>
-          <td class="px-6 py-4">
-              ${name}
-          </td>
-          <td class="px-6 py-4">
-              ${address}
-          </td>
-          <td class="px-6 py-4">
-              ${email}
-          </td>
-          <td class="px-6 py-4">
-            ${setType(id)}
-          </td>
-          <td class="px-6 py-4">
-            <div class="flex">
-                <button class="edit text-2xl me-4 text-green-500" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"><i class="ri-edit-fill"></i></button>
-                <button class="text-2xl text-red-500" onclick="removePerson('${id}')"><i class="ri-delete-bin-fill"></i></button>
-            </div>
-          </td>
-      </tr>`
+  if(!arrPerson || arrPerson.length ==0){
+    document.querySelector('tbody').innerHTML = ''
+  }else{
+    arrPerson.forEach((item) =>{
+      const {id,name,address,email} = item
+      content += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                ${id}
+            </th>
+            <td class="px-6 py-4">
+                ${name}
+            </td>
+            <td class="px-6 py-4">
+                ${address}
+            </td>
+            <td class="px-6 py-4">
+                ${email}
+            </td>
+            <td class="px-6 py-4">
+              ${setType(id)}
+            </td>
+            <td class="px-6 py-4">
+              <div class="flex">
+                  <button onclick = "openEditForm('${id}','${setType(id).toLowerCase()}')" class="edit text-2xl me-4 text-green-500" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"><i class="ri-edit-fill"></i></button>
+                  <button class="text-2xl text-red-500" onclick="removePerson('${id}')"><i class="ri-delete-bin-fill"></i></button>
+              </div>
+            </td>
+        </tr>`
+  
+        document.querySelector('tbody').innerHTML = content
+    })
+  }
 
-      document.querySelector('tbody').innerHTML = content
-  }) : ''
 }
 
 showPersonData()
-document.querySelector('.edit').addEventListener('click', function(){
+const openEditForm = (data,type) =>{
   document.querySelector('.title').innerHTML = 'Cập nhật người dùng'
   enableAdd(false)
   enableUpdate(true)
 
-})
+  let content = openForm(type,'')
+  document.querySelector('.specific').innerHTML = content
+  let arrForm = document.querySelectorAll('form input','.specific input')
+
+  document.getElementById('type').value = type
+  let person = arrPerson.getPersonFromList(data)
+  arrForm.forEach((item,index) =>{
+    item.value = person[`${item.id}`]
+  })
+}
 
 const addPersonData = () =>{
     let arrForm = document.querySelectorAll('form input')
+    arrPerson.setList(getFromLocalStorage())
     let personType = document.getElementById('type').value
     let person = null, type = ''
     switch(personType){
@@ -195,5 +215,7 @@ const removePerson = (id) =>{
 
 window.removePerson = removePerson
 window.addPersonData = addPersonData
+window.openAddData = openAddData
+window.openEditForm = openEditForm
 
 
