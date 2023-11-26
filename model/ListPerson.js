@@ -34,7 +34,11 @@ export class ListPerson{
 
     sortListByAlphabetical = () =>{
         this.arrPerson.sort((a,b) =>{
-            return (a.name > b.name ? 1 : (a.name === b.name ? 0 : -1))
+            let array = a.name.trim().split(' ')
+            let array2 = b.name.trim().split(' ')
+            let lastIndex = array[array.length-1]
+            let lastIndex2 = array2[array2.length-1]
+            return (lastIndex < lastIndex2 ? -1 : (lastIndex > lastIndex2 ? 1 : 0))
         })
     }
 }

@@ -28,8 +28,12 @@
       Thêm người dùng
     </button>
 
+    <button onclick="orderListByName()" class="block my-6 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
+      Sắp xếp theo tên người dùng
+    </button>
+
     <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="filter">
-      <option value="">Lọc theo ... </option>
+      <option value="">Mặc định </option>
       <option value="student">Học Sinh</option>
       <option value="employee">Nhân viên</option>
       <option value="customer">Khách hàng</option>
@@ -126,8 +130,8 @@
                   <th scope="col" class="px-6 py-3">
                       Email
                   </th>
-                  <th scope="col" class="px-6 py-3">
-                      Loại người dùng
+                  <th scope="col" class="px-6 py-3 customColumn">
+                      
                   </th>
                   <th scope="col" class="px-6 py-3">
                       Hành động

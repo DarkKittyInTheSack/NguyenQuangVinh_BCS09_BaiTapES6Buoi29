@@ -3,6 +3,7 @@ import { Customer } from "../model/Customer.js"
 import { Employee } from "../model/Employee.js"
 import { ListPerson } from "../model/ListPerson.js"
 import { Student } from "../model/Student.js"
+import { Validation } from "./validation/validation.js"
 
 let arrPerson = new ListPerson()
 
@@ -91,7 +92,7 @@ document.getElementById('type').addEventListener('change', function(){
 
 document.getElementById('filter').addEventListener('change', ()=>{
   let value = document.getElementById('filter').value
-  showPersonData(arrPerson.fillterPersonList(value.toUpperCase()))
+  showPersonData(arrPerson.fillterPersonList(value.toUpperCase()),value.toUpperCase())
 })
 
 const enableUpdate = (enterUpdate) =>{
@@ -130,13 +131,63 @@ const setType = (id) =>{
   return type
 }
 
-const showPersonData = (arr = arrPerson.getList()) =>{
+const customColumn = (inputType = '',id = '',item) =>{
+  let tempObj = {
+    data:'',
+    header:''
+  }
+
+  switch(inputType){
+    case 'STUDENT':
+      const {markMath,markPhys,markChems} = item
+
+      let student =new Student()
+      student.markMath = markMath
+      student.markChems = markChems
+      student.markPhys = markPhys
+      tempObj.data = `<td class="px-6 py-4">
+      ${student.averageMark()}
+    </td>`
+      tempObj.header = 'Điểm trung bình'
+    break
+
+    case 'EMPLOYEE':
+      const {workingHour,salaryPerHour} = item
+      let employee = new Employee()
+      employee.workingHour = workingHour
+      employee.salaryPerHour = salaryPerHour
+      tempObj.data = `<td class="px-6 py-4">
+      ${employee.calculateSalary().toLocaleString('it-IT',{type:'currency',currency:'VND'})}
+    </td>`
+      tempObj.header = 'Tổng lương theo giờ'
+    break
+
+    case 'CUSTOMER':
+      const {companyName,billValue,rate} = item
+      tempObj.data = `<td class="px-6 py-4">
+      ${companyName}
+    </td>`
+      tempObj.header = 'Tên công ty '
+    break
+
+    default:
+        tempObj.data = `<td class="px-6 py-4">
+        ${setType(id)}
+      </td>`
+        tempObj.header = 'Loại người dùng'
+    break
+  }
+  return tempObj
+}
+
+const showPersonData = (arr = arrPerson.getList(),custom = '') =>{
   let content = ''
   if(!arr || arr.length ==0){
     document.querySelector('tbody').innerHTML = ''
   }else{
     arr.forEach((item) =>{
       const {id,name,address,email} = item
+      const {data,header} = customColumn(custom,id,item)
       content += `<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 ${id}
@@ -150,9 +201,7 @@ const showPersonData = (arr = arrPerson.getList()) =>{
             <td class="px-6 py-4">
                 ${email}
             </td>
-            <td class="px-6 py-4">
-              ${setType(id)}
-            </td>
+            ${data}
             <td class="px-6 py-4">
               <div class="flex">
                   <button onclick = "openEditForm('${id}','${setType(id).toLowerCase()}')" class="edit text-2xl me-4 text-green-500" data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"><i class="ri-edit-fill"></i></button>
@@ -160,11 +209,16 @@ const showPersonData = (arr = arrPerson.getList()) =>{
               </div>
             </td>
         </tr>`
-  
         document.querySelector('tbody').innerHTML = content
+        document.querySelector('.customColumn').innerHTML = header
     })
   }
 
+}
+
+const orderListByName = ()=>{
+  arrPerson.sortListByAlphabetical()
+  showPersonData()
 }
 
 showPersonData()
@@ -174,7 +228,7 @@ const getPersonInForm = () =>{
     let personType = document.getElementById('type').value
     let getIdForUpdate = document.getElementById('id').value
     
-    let person = null, type = '',isValid = true
+    let person = {}, type = '',isValid = true,validation = new Validation()
     switch(personType){
         case 'student':
             person = new Student()
@@ -192,20 +246,29 @@ const getPersonInForm = () =>{
             break;
     }
     arrForm.forEach((item,index) =>{
-      if(item.id == 'id' && !getIdForUpdate.includes(type)){
-        person[item.id] = item.value+type
-      }else{
-        person[item.id] = item.value
-      }
-      // isValid &= checkNull(item.id,item.id+'Error')
-    })
-
-    // if(isValid){
+      item.id == 'name' ? isValid &= validation.checkName(item.id)
+      : item.id == 'email' ? isValid &= validation.checkEmail(item.id)
+      : item.id == 'markMath' ? isValid &= validation.checkDataInRange(item.id,1,10)
+      : item.id == 'markPhys' ? isValid &= validation.checkDataInRange(item.id,1,10)
+      : item.id == 'markChems' ? isValid &= validation.checkDataInRange(item.id,1,10)
+      : item.id == 'workingHour' ? isValid &= validation.checkDataInRange(item.id,1,200)
+      : item.id == 'salaryPerHour' ? isValid &= validation.checkDataInRange(item.id,50000,200000)
+      : item.id == 'billValue' ? isValid &= validation.checkDataInRange(item.id,10000,2000000)
+      : item.id == 'rate' ? isValid &= validation.checkDataInRange(item.id,1,5)
+      : isValid &= validation.checkNull(item.id)
       
-    // }
-
-    return person
+      if(isValid){
+        if(item.id == 'id' && !getIdForUpdate.includes(type)){
+          person[item.id] = item.value+type
+        }else{
+          person[item.id] = item.value
+        }
+      }
+    })
     
+    if(isValid){
+      return person
+    }
 }
 
 const openEditForm = (data,type) =>{
@@ -227,18 +290,23 @@ const openEditForm = (data,type) =>{
 }
 
 const updatePerson = () =>{
+  if(getPersonInForm() != null){
     let personID = document.getElementById('id').value
     arrPerson.getList()[arrPerson.getPersonIndexByID(personID)] = getPersonInForm()
     addToLocalStorage()
     showPersonData()
+  }  
 }
 
 const addPersonData = () =>{
-    arrPerson.setList(getFromLocalStorage())
-    arrPerson.addPersonToList(getPersonInForm())
+  let person = getPersonInForm()
+  if(person){
+    arrPerson.addPersonToList(person)
     addToLocalStorage()
     showPersonData()
-}
+  }
+  }
+  
 
 const removePerson = (id) =>{
   arrPerson.setList(getFromLocalStorage())
@@ -252,5 +320,7 @@ window.addPersonData = addPersonData
 window.openAddData = openAddData
 window.openEditForm = openEditForm
 window.updatePerson = updatePerson
+window.customColumn = customColumn
+window.orderListByName = orderListByName
 
 

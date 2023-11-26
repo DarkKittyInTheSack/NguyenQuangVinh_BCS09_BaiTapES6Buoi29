@@ -9,6 +9,6 @@ export class Student extends Person{
     }
 
     averageMark = () =>{
-        return (this.markMath + this.markPhys + this.markChems)/3
+        return (this.markMath*1 + this.markPhys*1 + this.markChems*1) / 3
     }
 }
