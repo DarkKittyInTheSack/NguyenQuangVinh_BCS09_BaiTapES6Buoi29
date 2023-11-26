@@ -248,13 +248,13 @@ const getPersonInForm = () =>{
     arrForm.forEach((item,index) =>{
       item.id == 'name' ? isValid &= validation.checkName(item.id)
       : item.id == 'email' ? isValid &= validation.checkEmail(item.id)
-      : item.id == 'markMath' ? isValid &= validation.checkDataInRange(item.id,1,10)
-      : item.id == 'markPhys' ? isValid &= validation.checkDataInRange(item.id,1,10)
-      : item.id == 'markChems' ? isValid &= validation.checkDataInRange(item.id,1,10)
-      : item.id == 'workingHour' ? isValid &= validation.checkDataInRange(item.id,1,200)
-      : item.id == 'salaryPerHour' ? isValid &= validation.checkDataInRange(item.id,50000,200000)
-      : item.id == 'billValue' ? isValid &= validation.checkDataInRange(item.id,10000,2000000)
-      : item.id == 'rate' ? isValid &= validation.checkDataInRange(item.id,1,5)
+      : item.id == 'markMath' ? isValid &= validation.checkDataInRange(item.id,1,10,'Vui lòng nhập điểm toán hợp lệ')
+      : item.id == 'markPhys' ? isValid &= validation.checkDataInRange(item.id,1,10,'Vui lòng nhập điểm lý hợp lệ')
+      : item.id == 'markChems' ? isValid &= validation.checkDataInRange(item.id,1,10,'Vui lòng nhập điểm hóa hợp lệ')
+      : item.id == 'workingHour' ? isValid &= validation.checkDataInRange(item.id,1,200,'Vui lòng nhập số giờ làm hợp lệ')
+      : item.id == 'salaryPerHour' ? isValid &= validation.checkDataInRange(item.id,50000,200000,'Vui lòng nhập lương theo giờ hợp lệ')
+      : item.id == 'billValue' ? isValid &= validation.checkDataInRange(item.id,10000,2000000,'Vui lòng nhập giá trị hóa đơn hợp lệ')
+      : item.id == 'rate' ? isValid &= validation.checkDataInRange(item.id,1,5,'Vui lòng nhập điểm đánh giá hợp lệ')
       : isValid &= validation.checkNull(item.id)
       
       if(isValid){
@@ -300,11 +300,12 @@ const updatePerson = () =>{
 
 const addPersonData = () =>{
   let person = getPersonInForm()
-  if(person){
-    arrPerson.addPersonToList(person)
-    addToLocalStorage()
-    showPersonData()
-  }
+    if(person){
+      arrPerson.addPersonToList(person)
+      addToLocalStorage()
+      showPersonData()
+      document.querySelector('form').reset()
+    }
   }
   
 

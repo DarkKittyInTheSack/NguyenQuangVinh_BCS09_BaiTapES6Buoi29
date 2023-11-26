@@ -34,13 +34,13 @@ export class Validation{
         }
     }
 
-    checkDataInRange = (id,min,max) =>{
+    checkDataInRange = (id,min,max,errMessage) =>{
         let valueData =  document.getElementById(id).value
         if(valueData < max*1 && valueData >= min*1 ){
             document.getElementById(`${id}`+'Error').innerHTML = ''
             return true
         }else{
-            document.getElementById(`${id}`+'Error').innerHTML = 'Vui lòng nhập số liệu hợp lệ'
+            document.getElementById(`${id}`+'Error').innerHTML = errMessage
             return false
         }
     }
